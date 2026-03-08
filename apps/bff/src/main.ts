@@ -13,11 +13,16 @@ async function bootstrap() {
   const globalPrefix = AppModule.CONFIGURATION.GLOBA_PREFIX;
   app.setGlobalPrefix(globalPrefix);
 
+  //config cors
+  app.enableCors({
+    origin: '*',
+  });
+
   //configure validation pipe
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
-    })
+    }),
   );
 
   //config swagger
@@ -40,12 +45,8 @@ async function bootstrap() {
 
   const port = AppModule.CONFIGURATION.APP_CONFIG.PORT;
   await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
-  Logger.log(
-    `🚀 Swagger is running on: http://localhost:${port}/${globalPrefix}/docs`
-  );
+  Logger.log(`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`);
+  Logger.log(`🚀 Swagger is running on: http://localhost:${port}/${globalPrefix}/docs`);
 }
 
 bootstrap();
