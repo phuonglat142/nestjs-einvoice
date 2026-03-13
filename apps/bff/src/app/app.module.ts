@@ -6,12 +6,15 @@ import { CONFIGURATION, TConfiguration } from '../configuration';
 import { LoggerMiddleware } from '@common/middlewares/logger.middleware';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ExceptionInterceptor } from '@common/interceptors/exception.interceptor';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { TCP_SERVICE, TcpProvider } from '@common/configuration/tcp.config';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [() => CONFIGURATION],
     }),
+    ClientsModule.registerAsync([TcpProvider(TCP_SERVICE.INVOICE_SERVICE)]),
   ],
   controllers: [AppController],
   providers: [
