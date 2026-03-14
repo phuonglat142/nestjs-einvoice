@@ -3,7 +3,8 @@ import { AppService } from './app.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { TcpLoggingInterceptor } from '@common/interceptors/tcpLogging.interceptor';
 import { Response } from '@common/interfaces/tcp/common/response.interface';
-import { Request } from '@common/interfaces/tcp/common/request.interface';
+import { ProcessId } from '@common/decorators/processId.decorator';
+import { RequestParams } from '@common/decorators/request-param.decorator';
 
 @Controller()
 @UseInterceptors(TcpLoggingInterceptor)
@@ -16,7 +17,14 @@ export class AppController {
   }
 
   @MessagePattern('get_invoice')
-  getInvoice(data: Request<number>): Response<string> {
-    return Response.success<string>(`Invoice #${data.data} details`);
+  getInvoice(
+    @ProcessId() processId: string,
+    @RequestParams()
+    params: {
+      invoiceId: number;
+      invoiceName: string;
+    },
+  ): Response<string> {
+    return Response.success<string>(`Invoice #${params.invoiceId} details`);
   }
 }
